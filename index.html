@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ADM Catálogo - Shekinah Auto Center</title>
+  <title>ADM - Auto Center Shekinah</title>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -46,6 +46,20 @@
     .card-actions{display:flex;gap:.5rem;margin-top:.4rem}.card-actions .btn{flex:1;padding:.65rem .7rem;border-radius:10px;font-size:.82rem}
     .empty{grid-column:1/-1;text-align:center;padding:3rem 1rem;color:var(--muted);border:1px dashed var(--line);border-radius:18px;background:rgba(255,255,255,.02)}
     .helper{margin-top:1.2rem;border-top:1px solid var(--line);padding-top:1rem;color:var(--muted);font-size:.86rem;line-height:1.6}.helper strong{color:var(--yellow)}
+
+    .banner-panel{margin-bottom:1.5rem}
+    .banner-layout{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:1.5rem;align-items:start}
+    .banner-preview{aspect-ratio:1/1;border:1px dashed var(--yellow);border-radius:16px;background:#090909;display:grid;place-items:center;overflow:hidden;color:var(--muted);text-align:center}
+    .banner-preview img{width:100%;height:100%;object-fit:contain;display:block}
+    .banner-preview img[hidden]{display:none}
+    .banner-preview p{padding:1.5rem}
+    .banner-note{color:var(--muted);font-size:.85rem;margin-top:.5rem;line-height:1.6}
+    .banner-status{min-height:1.5em;margin-top:1rem;line-height:1.6;font-size:.9rem}
+    .banner-status[data-type="error"]{color:#ffaaaa}
+    .banner-status[data-type="success"]{color:#b9ffd0}
+    .btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    input[type="file"]{max-width:100%;font-size:.82rem}
+    @media(max-width:680px){.banner-layout{grid-template-columns:minmax(0,1fr)}.banner-preview{width:100%;max-width:320px;margin:auto}.banner-panel .btn{white-space:normal}.banner-panel{min-width:0}}
 
     /* Tela de login */
     .login-overlay {
@@ -121,9 +135,9 @@
     <img src="https://i.im.ge/eGfADP/Design_sem_nome-t150.webp" alt="Shekinah">
     <h2>Acesso restrito</h2>
     <p>Digite a senha administrativa</p>
-    <input type="password" id="passwordInput" placeholder="Senha" autocomplete="off">
+    <input type="password" id="passwordInput" placeholder="Senha" autocomplete="current-password" aria-label="Senha administrativa">
     <button id="loginBtn" class="btn btn-primary"><i class="fa-solid fa-key"></i> Entrar</button>
-    <div id="loginError" class="login-error"><i class="fa-solid fa-circle-exclamation"></i> Senha incorreta.</div>
+    <div id="loginError" class="login-error" role="alert"><i class="fa-solid fa-circle-exclamation"></i> Senha incorreta.</div>
   </div>
 </div>
 
@@ -133,10 +147,10 @@
     <div class="topbar">
       <div class="brand">
         <img src="https://i.im.ge/eGfADP/Design_sem_nome-t150.webp" alt="Logo Shekinah Auto Center">
-        <div class="brand-text"><h1>ADM Catálogo</h1><p>Produtos e categorias</p></div>
+        <div class="brand-text"><h1>ADM Shekinah</h1><p>Banner, produtos e categorias</p></div>
       </div>
       <div class="top-actions">
-        <a class="btn btn-outline" href="index.html"><i class="fa-solid fa-house"></i> Voltar ao site</a>
+        <a class="btn btn-outline" href="https://site-shekinah-six.vercel.app/" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-house"></i> Voltar ao site</a>
         <button class="btn btn-primary" id="reloadBtn" type="button"><i class="fa-solid fa-rotate-right"></i> Atualizar</button>
         <button class="btn btn-danger" id="logoutBtn" type="button"><i class="fa-solid fa-sign-out-alt"></i> Sair</button>
       </div>
@@ -145,6 +159,34 @@
 
   <main>
     <div id="status" class="status"></div>
+
+    <section class="panel banner-panel" aria-labelledby="bannerTitle">
+      <h2 id="bannerTitle">Banner do site</h2>
+      <p class="panel-sub">Atualize a arte que aparece na página inicial. O botão de atendimento continua direcionando para o WhatsApp.</p>
+      <div class="banner-layout">
+        <div class="banner-preview">
+          <img id="bannerPreview" alt="Prévia do banner selecionado" hidden>
+          <p id="bannerEmpty">Nenhum banner personalizado.<br>O site usa a arte padrão.</p>
+        </div>
+        <form id="bannerForm">
+          <div class="form-group">
+            <label for="bannerFile">Selecionar arte</label>
+            <input id="bannerFile" type="file" accept="image/png,image/jpeg,image/webp" aria-describedby="bannerFileHelp">
+            <p class="banner-note" id="bannerFileHelp">1080 × 1080 pixels · PNG, JPG ou WebP · até 2 MB.</p>
+          </div>
+          <div class="form-group">
+            <label for="bannerAlt">Descrição da arte *</label>
+            <input id="bannerAlt" type="text" maxlength="180" required placeholder="Ex.: Campanha de pneus e alinhamento da Shekinah">
+            <p class="banner-note">Descreva a mensagem da imagem para quem utiliza leitor de tela.</p>
+          </div>
+          <div class="form-actions">
+            <button id="publishBannerBtn" class="btn btn-primary" type="submit" disabled><i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i> Publicar banner</button>
+            <button id="resetBannerBtn" class="btn btn-soft" type="button" disabled>Restaurar banner padrão</button>
+          </div>
+          <p id="bannerStatus" class="banner-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
 
     <div class="dashboard">
       <div class="left-stack">
@@ -199,12 +241,8 @@
 </div>
 
 <script>
-  // ==================== CONFIGURAÇÃO DE SEGURANÇA ====================
-  // Altere a senha abaixo para o que desejar (use caracteres fortes)
-  const ADMIN_PASSWORD = "shekinah2025";   // <-- Troque por uma senha segura
-  const SESSION_KEY = "shekinah_admin_auth";
-
-  // Elementos de login
+  const SESSION_KEY = "shekinah_admin_session_v2";
+  sessionStorage.removeItem("shekinah_admin_auth");
   const loginScreen = document.getElementById("loginScreen");
   const adminContent = document.getElementById("adminContent");
   const passwordInput = document.getElementById("passwordInput");
@@ -212,53 +250,59 @@
   const loginErrorDiv = document.getElementById("loginError");
   const logoutBtn = document.getElementById("logoutBtn");
 
-  // Funções de autenticação
+  function readSession() {
+    try { return JSON.parse(sessionStorage.getItem(SESSION_KEY) || "null"); }
+    catch { return null; }
+  }
   function isAuthenticated() {
-    return sessionStorage.getItem(SESSION_KEY) === "true";
+    const session = readSession();
+    return Boolean(session?.token && session.expiresAt > Date.now());
   }
-
-  function doLogin(password) {
-    if (password === ADMIN_PASSWORD) {
-      sessionStorage.setItem(SESSION_KEY, "true");
+  function showLoginError(message) {
+    loginErrorDiv.textContent = message;
+    loginErrorDiv.style.display = "block";
+  }
+  async function doLogin(password) {
+    if (loginBtn.disabled) return;
+    loginBtn.disabled = true;
+    loginErrorDiv.style.display = "none";
+    try {
+      const { data } = await axios.post(`${API_URL}/admin/login`, { password }, { timeout: 15000 });
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify(data));
+      passwordInput.value = "";
       showAdminDashboard();
-      return true;
-    } else {
-      loginErrorDiv.style.display = "block";
-      setTimeout(() => { loginErrorDiv.style.display = "none"; }, 2500);
-      return false;
-    }
+    } catch (error) {
+      showLoginError(error.response?.data?.error || "Não foi possível entrar. Verifique sua conexão e tente novamente.");
+    } finally { loginBtn.disabled = false; }
   }
-
   function logout() {
     sessionStorage.removeItem(SESSION_KEY);
     loginScreen.style.display = "flex";
     adminContent.classList.remove("visible");
-    // Limpa campos de senha
-    if(passwordInput) passwordInput.value = "";
+    passwordInput.value = "";
     loginErrorDiv.style.display = "none";
   }
-
   function showAdminDashboard() {
     loginScreen.style.display = "none";
     adminContent.classList.add("visible");
-    // Inicializa o painel administrativo depois de autenticado
-    if (typeof initializeAdmin === "function") {
-      initializeAdmin();
+    initializeAdmin();
+  }
+  async function adminRequest(config) {
+    if (!isAuthenticated()) {
+      logout();
+      showLoginError("Sua sessão expirou. Entre novamente.");
+      throw new Error("Sessão expirada.");
+    }
+    try {
+      return await axios.request({ ...config, headers: { ...config.headers, Authorization: `Bearer ${readSession().token}` } });
+    } catch (error) {
+      if (error.response?.status === 401) { logout(); showLoginError("Sua sessão expirou. Entre novamente."); }
+      throw error;
     }
   }
-
-  // Eventos de login
-  loginBtn.addEventListener("click", () => {
-    doLogin(passwordInput.value);
-  });
-  passwordInput.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") doLogin(passwordInput.value);
-  });
-
-  // Botão sair
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", logout);
-  }
+  loginBtn.addEventListener("click", () => doLogin(passwordInput.value));
+  passwordInput.addEventListener("keydown", event => { if (event.key === "Enter") doLogin(passwordInput.value); });
+  logoutBtn.addEventListener("click", logout);
 
   // ==================== LÓGICA COMPLETA DO ADMIN (CATÁLOGO) ====================
   const STORAGE_KEY = "shekinah_admin_api_url";
@@ -358,8 +402,8 @@
     const btn=el("submitBtn");
     btn.disabled=true; btn.innerHTML=`<i class="fa-solid fa-spinner fa-spin"></i> Salvando...`;
     try{
-      if(id){ await axios.put(`${API_URL}/produtos/${encodeURIComponent(id)}`,payload,{timeout:10000}); showStatus("Produto atualizado com sucesso.","success"); }
-      else{ await axios.post(`${API_URL}/produtos`,payload,{timeout:10000}); showStatus("Produto cadastrado com sucesso.","success"); }
+      if(id){ await adminRequest({method:"put",url:`${API_URL}/produtos/${encodeURIComponent(id)}`,data:payload,timeout:10000}); showStatus("Produto atualizado com sucesso.","success"); }
+      else{ await adminRequest({method:"post",url:`${API_URL}/produtos`,data:payload,timeout:10000}); showStatus("Produto cadastrado com sucesso.","success"); }
       clearForm(); await loadProducts();
     }catch(error){
       console.error(error);
@@ -389,7 +433,7 @@
     const p=products[index]; const id=getProductId(p); const title=getProductTitle(p)||"produto";
     if(!id){ showStatus("Não encontrei o ID desse produto para excluir.","error"); return; }
     if(!confirm(`Tem certeza que deseja excluir "${title}"?`)) return;
-    try{ await axios.delete(`${API_URL}/produtos/${encodeURIComponent(id)}`,{timeout:10000}); showStatus("Produto excluído com sucesso.","success"); await loadProducts(); }
+    try{ await adminRequest({method:"delete",url:`${API_URL}/produtos/${encodeURIComponent(id)}`,timeout:10000}); showStatus("Produto excluído com sucesso.","success"); await loadProducts(); }
     catch(error){ console.error(error); showStatus("Erro ao excluir. Confira se sua API aceita DELETE em /produtos/:id.","error"); }
   }
 
@@ -449,8 +493,122 @@
     }
   }
 
+  let savedBanner = null;
+  let selectedBannerData = null;
+  let bannerBusy = false;
+  let bannerSelectionVersion = 0;
+  let bannerLoadVersion = 0;
+  function bannerStatus(message, type = "info") {
+    el("bannerStatus").textContent = message;
+    el("bannerStatus").dataset.type = type;
+  }
+  function bannerImageUrl(banner) {
+    const url = new URL(banner.imageUrl, `${API_URL}/`);
+    if (url.origin !== new URL(API_URL).origin || url.pathname !== "/api/banner/image") throw new Error("Imagem inválida.");
+    return url.href;
+  }
+  function renderBannerPreview() {
+    const preview = el("bannerPreview");
+    const source = selectedBannerData || (savedBanner ? bannerImageUrl(savedBanner) : null);
+    preview.hidden = !source;
+    el("bannerEmpty").hidden = Boolean(source);
+    if (source) { preview.src = source; preview.alt = el("bannerAlt").value || "Prévia do banner"; }
+    else preview.removeAttribute("src");
+    el("publishBannerBtn").disabled = bannerBusy || !selectedBannerData;
+    el("resetBannerBtn").disabled = bannerBusy || !savedBanner;
+    el("bannerFile").disabled = bannerBusy;
+    el("bannerAlt").disabled = bannerBusy;
+  }
+  async function loadBanner() {
+    const version = ++bannerLoadVersion;
+    try {
+      const { data } = await axios.get(`${API_URL}/banner`, { timeout: 15000 });
+      if (version !== bannerLoadVersion) return;
+      if (data.banner) bannerImageUrl(data.banner);
+      savedBanner = data.banner;
+      if (!selectedBannerData) {
+        el("bannerAlt").value = savedBanner?.altText || "";
+        bannerStatus(savedBanner ? "Banner publicado no site." : "O site está usando a arte padrão.");
+      }
+      renderBannerPreview();
+    } catch {
+      if (version === bannerLoadVersion) bannerStatus("Não foi possível carregar o banner. Tente atualizar o painel.", "error");
+    }
+  }
+  async function selectBanner() {
+    const version = ++bannerSelectionVersion;
+    selectedBannerData = null;
+    renderBannerPreview();
+    const file = el("bannerFile").files[0];
+    if (!file) return;
+    try {
+      if (!["image/png", "image/jpeg", "image/webp"].includes(file.type)) throw new Error("Escolha uma imagem PNG, JPG ou WebP.");
+      if (file.size > 2 * 1024 * 1024) throw new Error("A imagem deve ter no máximo 2 MB.");
+      bannerStatus("Conferindo a arte...");
+      const data = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(new Error("Não foi possível ler o arquivo."));
+        reader.readAsDataURL(file);
+      });
+      const img = new Image();
+      img.src = data;
+      await img.decode();
+      if (img.naturalWidth !== 1080 || img.naturalHeight !== 1080) throw new Error("A arte precisa ter exatamente 1080 × 1080 pixels.");
+      if (version !== bannerSelectionVersion) return;
+      selectedBannerData = data;
+      bannerStatus("Arte pronta. Confira a prévia e clique em Publicar banner.");
+      renderBannerPreview();
+    } catch (error) {
+      if (version !== bannerSelectionVersion) return;
+      el("bannerFile").value = "";
+      bannerStatus(error.message || "Não foi possível ler a imagem.", "error");
+      renderBannerPreview();
+    }
+  }
+  async function publishBanner(event) {
+    event.preventDefault();
+    if (bannerBusy || !selectedBannerData) return;
+    if (!el("bannerAlt").value.trim()) { bannerStatus("Preencha a descrição da arte.", "error"); return; }
+    ++bannerLoadVersion;
+    bannerBusy = true;
+    renderBannerPreview();
+    bannerStatus("Publicando banner...");
+    try {
+      const { data } = await adminRequest({ method: "put", url: `${API_URL}/banner`, data: { imageData: selectedBannerData, altText: el("bannerAlt").value.trim() }, timeout: 30000 });
+      savedBanner = data.banner;
+      selectedBannerData = null;
+      el("bannerFile").value = "";
+      bannerStatus("Banner publicado! Ele aparecerá ao abrir ou atualizar o site.", "success");
+    } catch (error) {
+      bannerStatus(error.response?.data?.error || "Não foi possível publicar. Sua arte foi mantida para tentar novamente.", "error");
+    } finally { bannerBusy = false; renderBannerPreview(); }
+  }
+  async function resetBanner() {
+    if (bannerBusy || !savedBanner || !confirm("Remover a arte publicada e voltar ao banner padrão do site?")) return;
+    ++bannerLoadVersion;
+    ++bannerSelectionVersion;
+    bannerBusy = true;
+    renderBannerPreview();
+    try {
+      await adminRequest({ method: "delete", url: `${API_URL}/banner`, timeout: 15000 });
+      savedBanner = null;
+      selectedBannerData = null;
+      el("bannerFile").value = "";
+      el("bannerAlt").value = "";
+      bannerStatus("Banner padrão restaurado. Atualize o site para conferir.", "success");
+    } catch (error) { bannerStatus(error.response?.data?.error || "Não foi possível restaurar o banner padrão.", "error"); }
+    finally { bannerBusy = false; renderBannerPreview(); }
+  }
+
+  let adminInitialized = false;
   // Função inicializadora chamada após login
   function initializeAdmin() {
+    if (adminInitialized) { loadProducts(); loadBanner(); return; }
+    adminInitialized = true;
+    el("bannerFile").addEventListener("change", selectBanner);
+    el("bannerForm").addEventListener("submit", publishBanner);
+    el("resetBannerBtn").addEventListener("click", resetBanner);
     renderCategories();
     setupApiUrl();
     const addCategoryBtn = el("addCategoryBtn");
@@ -476,21 +634,23 @@
     const clearBtn = el("clearBtn");
     if(clearBtn) clearBtn.addEventListener("click", clearForm);
     const reloadBtn = el("reloadBtn");
-    if(reloadBtn) reloadBtn.addEventListener("click", loadProducts);
+    if(reloadBtn) reloadBtn.addEventListener("click", () => { loadProducts(); loadBanner(); });
     const searchInput = el("searchInput");
     if(searchInput) searchInput.addEventListener("input", renderProducts);
     const filterCategory = el("filterCategory");
     if(filterCategory) filterCategory.addEventListener("change", renderProducts);
     loadProducts();
+    loadBanner();
   }
 
-  // Verifica se já está autenticado ao carregar a página
-  if (isAuthenticated()) {
-    showAdminDashboard();
-  } else {
-    loginScreen.style.display = "flex";
-    adminContent.classList.remove("visible");
+  async function restoreAdminSession() {
+    if (!isAuthenticated()) { logout(); return; }
+    try {
+      await adminRequest({ method: "get", url: `${API_URL}/admin/session`, timeout: 15000 });
+      showAdminDashboard();
+    } catch { logout(); showLoginError("Entre novamente para acessar o painel."); }
   }
+  restoreAdminSession();
 </script>
 </body>
 </html>
