@@ -1,4 +1,4 @@
-# Painel Auto Center Shekinah
+# Painel Centro Automotivo Shekinah
 
 Painel estático integrado à `shekinah-api`. Gerencia produtos, categorias locais e o banner do site.
 
