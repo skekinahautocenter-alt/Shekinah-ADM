@@ -168,14 +168,14 @@
   <dialog id="passwordDialog" aria-labelledby="passwordTitle">
     <form id="passwordForm">
       <h2 id="passwordTitle">Alterar senha</h2>
-      <p>Use pelo menos 16 caracteres. Ao salvar, será necessário entrar novamente em todos os dispositivos.</p>
+      <p>Ao salvar, será necessário entrar novamente em todos os dispositivos.</p>
       <label for="currentPassword">Senha atual</label>
       <input id="currentPassword" type="password" autocomplete="current-password" required maxlength="256">
       <label for="newPassword">Nova senha</label>
-      <input id="newPassword" type="password" autocomplete="new-password" required minlength="16" maxlength="256" aria-describedby="passwordHelp">
+      <input id="newPassword" type="password" autocomplete="new-password" required maxlength="256" aria-describedby="passwordHelp">
       <small id="passwordHelp">Você pode usar uma frase longa, fácil de lembrar.</small>
       <label for="confirmPassword">Confirmar nova senha</label>
-      <input id="confirmPassword" type="password" autocomplete="new-password" required minlength="16" maxlength="256">
+      <input id="confirmPassword" type="password" autocomplete="new-password" required maxlength="256">
       <p id="passwordStatus" role="status" aria-live="polite"></p>
       <div class="form-actions">
         <button class="btn btn-primary" id="savePasswordBtn" type="submit">Salvar nova senha</button>
