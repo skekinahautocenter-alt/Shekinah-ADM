@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ADM - Auto Center Shekinah</title>
+  <title>ADM - Centro Automotivo Shekinah</title>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -13,7 +13,7 @@
     body{font-family:Poppins,sans-serif;background:radial-gradient(circle at top left,rgba(255,215,0,.12),transparent 28%),linear-gradient(180deg,#050505,#0a0a0a);color:var(--text);min-height:100vh}
     header{position:sticky;top:0;z-index:20;background:rgba(9,9,9,.94);backdrop-filter:blur(12px);border-bottom:2px solid var(--yellow);padding:1rem 1.2rem}
     .topbar{max-width:1280px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:1rem}
-    .brand{display:flex;align-items:center;gap:.8rem}.brand img{height:54px;width:auto;display:block}.brand-text h1{font-size:1.15rem;line-height:1.1}.brand-text p{color:var(--muted);font-size:.85rem}
+    .brand{display:flex;align-items:center;gap:.8rem}.brand img{height:76px;width:190px;object-fit:cover;display:block;flex-shrink:0}.brand-text h1{font-size:1.15rem;line-height:1.1}.brand-text p{color:var(--muted);font-size:.85rem}
     .top-actions{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:flex-end}
     a,button{font-family:inherit;-webkit-tap-highlight-color:transparent}
     .btn{border:0;border-radius:999px;padding:.85rem 1.1rem;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:.45rem;text-decoration:none;transition:.25s;white-space:nowrap}
@@ -86,7 +86,9 @@
       box-shadow: 0 30px 60px rgba(0,0,0,0.6);
     }
     .login-card img {
-      width: 90px;
+      width: 280px;
+      max-width: 100%;
+      height: auto;
       margin-bottom: 1rem;
     }
     .login-card h2 {
@@ -124,7 +126,7 @@
       display: block;
     }
 
-    @media(max-width:1050px){.dashboard{grid-template-columns:1fr}.products-list{grid-template-columns:repeat(2,1fr)}}@media(max-width:680px){.topbar{align-items:flex-start;flex-direction:column}.top-actions{width:100%;justify-content:stretch}.top-actions .btn{flex:1}.products-list{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.search-row,.api-box,.category-manager{flex-direction:column;width:100%;align-items:stretch}.toolbar{align-items:stretch}.brand img{height:46px}.brand-text h1{font-size:1rem}}
+    @media(max-width:1050px){.dashboard{grid-template-columns:1fr}.products-list{grid-template-columns:repeat(2,1fr)}}@media(max-width:680px){.topbar{align-items:flex-start;flex-direction:column}.top-actions{width:100%;justify-content:stretch}.top-actions .btn{flex:1}.products-list{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.search-row,.api-box,.category-manager{flex-direction:column;width:100%;align-items:stretch}.toolbar{align-items:stretch}.brand{flex-wrap:wrap}.brand img{height:72px;width:180px}.brand-text h1{font-size:1rem}}
   </style>
 </head>
 <body>
@@ -132,7 +134,7 @@
 <!-- TELA DE LOGIN -->
 <div id="loginScreen" class="login-overlay">
   <div class="login-card">
-    <img src="https://i.im.ge/eGfADP/Design_sem_nome-t150.webp" alt="Shekinah">
+    <img src="assets/logo-centro-automotivo-shekinah.jpg" alt="Centro Automotivo Shekinah">
     <h2>Acesso restrito</h2>
     <p>Digite a senha administrativa</p>
     <input type="password" id="passwordInput" placeholder="Senha" autocomplete="current-password" aria-label="Senha administrativa">
@@ -146,8 +148,8 @@
   <header>
     <div class="topbar">
       <div class="brand">
-        <img src="https://i.im.ge/eGfADP/Design_sem_nome-t150.webp" alt="Logo Shekinah Auto Center">
-        <div class="brand-text"><h1>ADM Shekinah</h1><p>Banner, produtos e categorias</p></div>
+        <img src="assets/logo-centro-automotivo-shekinah.jpg" alt="Logo Centro Automotivo Shekinah">
+        <div class="brand-text"><h1>Centro Automotivo Shekinah</h1><p>Banner, produtos e categorias</p></div>
       </div>
       <div class="top-actions">
         <a class="btn btn-outline" href="https://site-shekinah-six.vercel.app/" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-house"></i> Voltar ao site</a>
