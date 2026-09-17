@@ -5,7 +5,7 @@ Painel estático integrado à `shekinah-api`. Gerencia produtos, categorias loca
 ## Enviar o banner
 
 1. Entre com a senha administrativa configurada no servidor.
-2. Em **Banner do site**, selecione uma arte PNG, JPG ou WebP estática de **1080 × 1080 pixels**, com até **2 MB**.
+2. Em **Banner do site**, selecione uma arte PNG, JPG ou WebP estática de **1080 × 1350 pixels**, com até **2 MB**.
 3. Preencha uma descrição acessível, confira a prévia e clique em **Publicar banner**.
 4. Abra ou atualize o site para ver a imagem. O clique na arte e o CTA continuam direcionando ao WhatsApp.
 
