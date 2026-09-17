@@ -22,3 +22,7 @@ Painel estático integrado à `shekinah-api`. Gerencia produtos, categorias loca
 - A API e o site precisam receber suas alterações correspondentes. O botão Publicar banner publica a imagem no banco, não realiza deploy do código.
 
 As categorias continuam salvas localmente, conforme o comportamento anterior.
+
+## Alterar senha
+
+No cabeçalho, clique em **Alterar senha**. Informe a senha atual e a nova senha duas vezes, com 16 a 256 caracteres. Ao salvar, todas as sessões são encerradas; entre novamente usando a nova senha. A alteração fica salva no banco e não exige redeploy.
