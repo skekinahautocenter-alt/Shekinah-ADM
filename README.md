@@ -14,7 +14,7 @@ Painel estático integrado à `shekinah-api`. Gerencia produtos, categorias loca
 ## Integração e publicação
 
 - API padrão: `https://shekinah-api-mocha.vercel.app/api`.
-- Site: `https://site-shekinah-shekina.vercel.app/` (botão Voltar ao site).
+- Site: `https://site-shekinah-six.vercel.app/` (botão Voltar ao site).
 - Dependência: publique a versão da API com `/api/admin/login`, `/api/admin/session` e `/api/banner`, execute sua migração e configure os segredos antes de publicar este painel.
 - O login agora é validado pelo servidor. A senha não fica no HTML; a sessão dura até 8 horas, fica em `sessionStorage` e é removida ao sair. Sessões antigas do painel não são aceitas.
 - As alterações de produtos usam a mesma autenticação de banner. Leituras públicas continuam disponíveis.
