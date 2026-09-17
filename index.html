@@ -127,6 +127,11 @@
     }
 
     @media(max-width:1050px){.dashboard{grid-template-columns:1fr}.products-list{grid-template-columns:repeat(2,1fr)}}@media(max-width:680px){.topbar{align-items:flex-start;flex-direction:column}.top-actions{width:100%;justify-content:stretch}.top-actions .btn{flex:1}.products-list{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.search-row,.api-box,.category-manager{flex-direction:column;width:100%;align-items:stretch}.toolbar{align-items:stretch}.brand{flex-wrap:wrap}.brand img{height:72px;width:180px}.brand-text h1{font-size:1rem}}
+    #passwordDialog{margin:auto;width:calc(100% - 2rem);max-width:480px;max-height:calc(100dvh - 2rem);overflow:auto;background:var(--panel);color:var(--text);border:1px solid var(--yellow);border-radius:24px;padding:1.5rem}
+    #passwordDialog::backdrop{background:rgba(0,0,0,.8)}
+    #passwordDialog h2{margin-bottom:.6rem}#passwordDialog p{font-size:.9rem;line-height:1.5;margin-bottom:1rem;color:var(--muted)}
+    #passwordDialog label{margin-top:1rem}#passwordDialog small{color:var(--muted)}#passwordDialog #passwordStatus{color:#ffaaaa;margin-top:1rem;min-height:1.5em}
+    .login-error[data-type="success"]{color:#b9ffd0;background:rgba(48,209,88,.1)}
   </style>
 </head>
 <body>
@@ -154,11 +159,30 @@
       <div class="top-actions">
         <a class="btn btn-outline" href="https://site-shekinah-six.vercel.app/" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-house"></i> Voltar ao site</a>
         <button class="btn btn-primary" id="reloadBtn" type="button"><i class="fa-solid fa-rotate-right"></i> Atualizar</button>
+        <button class="btn btn-outline" id="changePasswordBtn" type="button"><i class="fa-solid fa-lock" aria-hidden="true"></i> Alterar senha</button>
         <button class="btn btn-danger" id="logoutBtn" type="button"><i class="fa-solid fa-sign-out-alt"></i> Sair</button>
       </div>
     </div>
   </header>
 
+  <dialog id="passwordDialog" aria-labelledby="passwordTitle">
+    <form id="passwordForm">
+      <h2 id="passwordTitle">Alterar senha</h2>
+      <p>Use pelo menos 16 caracteres. Ao salvar, será necessário entrar novamente em todos os dispositivos.</p>
+      <label for="currentPassword">Senha atual</label>
+      <input id="currentPassword" type="password" autocomplete="current-password" required maxlength="256">
+      <label for="newPassword">Nova senha</label>
+      <input id="newPassword" type="password" autocomplete="new-password" required minlength="16" maxlength="256" aria-describedby="passwordHelp">
+      <small id="passwordHelp">Você pode usar uma frase longa, fácil de lembrar.</small>
+      <label for="confirmPassword">Confirmar nova senha</label>
+      <input id="confirmPassword" type="password" autocomplete="new-password" required minlength="16" maxlength="256">
+      <p id="passwordStatus" role="status" aria-live="polite"></p>
+      <div class="form-actions">
+        <button class="btn btn-primary" id="savePasswordBtn" type="submit">Salvar nova senha</button>
+        <button class="btn btn-soft" id="cancelPasswordBtn" type="button">Cancelar</button>
+      </div>
+    </form>
+  </dialog>
   <main>
     <div id="status" class="status"></div>
 
@@ -260,7 +284,8 @@
     const session = readSession();
     return Boolean(session?.token && session.expiresAt > Date.now());
   }
-  function showLoginError(message) {
+  function showLoginError(message, type = "error") {
+    loginErrorDiv.dataset.type = type;
     loginErrorDiv.textContent = message;
     loginErrorDiv.style.display = "block";
   }
@@ -278,6 +303,7 @@
     } finally { loginBtn.disabled = false; }
   }
   function logout() {
+    document.getElementById("passwordDialog").close();
     sessionStorage.removeItem(SESSION_KEY);
     loginScreen.style.display = "flex";
     adminContent.classList.remove("visible");
@@ -305,6 +331,39 @@
   loginBtn.addEventListener("click", () => doLogin(passwordInput.value));
   passwordInput.addEventListener("keydown", event => { if (event.key === "Enter") doLogin(passwordInput.value); });
   logoutBtn.addEventListener("click", logout);
+  const passwordDialog = document.getElementById("passwordDialog");
+  const passwordForm = document.getElementById("passwordForm");
+  const passwordStatus = document.getElementById("passwordStatus");
+  let passwordSaving = false;
+  document.getElementById("changePasswordBtn").addEventListener("click", () => {
+    passwordForm.reset(); passwordStatus.textContent = "";
+    passwordDialog.showModal(); document.getElementById("currentPassword").focus();
+  });
+  document.getElementById("cancelPasswordBtn").addEventListener("click", () => passwordDialog.close());
+  passwordDialog.addEventListener("cancel", event => { if (passwordSaving) event.preventDefault(); });
+  passwordDialog.addEventListener("close", () => { passwordForm.reset(); passwordStatus.textContent = ""; });
+  passwordForm.addEventListener("submit", async event => {
+    event.preventDefault();
+    if (passwordSaving) return;
+    const currentPassword = document.getElementById("currentPassword").value;
+    const newPassword = document.getElementById("newPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+    if (newPassword !== confirmPassword) { passwordStatus.textContent = "A confirmação não corresponde à nova senha."; return; }
+    if (newPassword === currentPassword) { passwordStatus.textContent = "Escolha uma senha diferente da atual."; return; }
+    passwordSaving = true;
+    const save = document.getElementById("savePasswordBtn");
+    const cancel = document.getElementById("cancelPasswordBtn");
+    save.disabled = cancel.disabled = true;
+    passwordStatus.textContent = "Salvando…";
+    try {
+      await adminRequest({ method:"put", url:`${API_URL}/admin/password`, data:{currentPassword,newPassword,confirmPassword}, timeout:30000 });
+      logout();
+      showLoginError("Senha alterada com sucesso. Entre com a nova senha.", "success");
+      passwordInput.focus();
+    } catch(error) { passwordStatus.textContent = error.response?.data?.error || "Não foi possível confirmar a alteração. Tente entrar com a nova senha antes de repetir."; }
+    finally { passwordSaving = false; save.disabled = cancel.disabled = false; }
+  });
+
 
   // ==================== LÓGICA COMPLETA DO ADMIN (CATÁLOGO) ====================
   const STORAGE_KEY = "shekinah_admin_api_url";
